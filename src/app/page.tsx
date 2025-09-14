@@ -1,103 +1,58 @@
+
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-100 flex flex-col font-sans">
+      <header className="w-full py-8 px-6 flex flex-col items-center justify-center bg-white/80 shadow-lg">
+        <Image src="/next.svg" alt="Logo" width={120} height={32} className="mb-2" />
+        <h1 className="text-4xl sm:text-5xl font-extrabold text-blue-700 mb-2 tracking-tight animate-fade-in">Studena Matchmaking</h1>
+        <p className="text-lg text-gray-700 max-w-xl text-center animate-fade-in2">Plateforme intelligente de mise en relation entre tuteurs et élèves, basée sur les matières, niveaux et disponibilités. Découvrez le matching parfait, instantanément.</p>
+        <nav className="mt-6 flex gap-4">
+          <Link href="/tutors" className="px-6 py-2 rounded-full bg-blue-600 text-white font-semibold shadow hover:bg-blue-700 transition">Tuteurs</Link>
+          <Link href="/students" className="px-6 py-2 rounded-full bg-purple-600 text-white font-semibold shadow hover:bg-purple-700 transition">Élèves</Link>
+          <Link href="/matchmaking" className="px-6 py-2 rounded-full bg-green-600 text-white font-semibold shadow hover:bg-green-700 transition">Matchmaking</Link>
+        </nav>
+      </header>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+      <main className="flex-1 flex flex-col items-center justify-center px-4 py-12 sm:py-20 animate-fade-in3">
+        <section className="max-w-2xl w-full bg-white/90 rounded-2xl shadow-xl p-8 mb-8 border border-blue-100">
+          <h2 className="text-2xl font-bold text-blue-800 mb-4">Pourquoi Studena ?</h2>
+          <ul className="list-disc pl-6 text-gray-700 space-y-2">
+            <li>Matching intelligent selon matière, niveau et créneaux horaires</li>
+            <li>Score de compatibilité avancé</li>
+            <li>Interface ultra-moderne, responsive et agréable</li>
+            <li>Ajout, gestion et recherche de tuteurs/élèves simplifiés</li>
+            <li>Optimisation et rapidité du matching</li>
+            <li>Bonus : gestion des cas sans tuteur, choix automatique du meilleur tuteur</li>
+          </ul>
+        </section>
+
+        <section className="max-w-2xl w-full bg-gradient-to-r from-blue-100 via-white to-purple-100 rounded-2xl shadow-lg p-8 border border-purple-100">
+          <h2 className="text-2xl font-bold text-purple-800 mb-4">Commencez maintenant</h2>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <Link href="/tutors" className="flex-1 px-6 py-4 rounded-xl bg-blue-600 text-white font-bold text-lg shadow-lg hover:bg-blue-700 transition text-center">Ajouter un tuteur</Link>
+            <Link href="/students" className="flex-1 px-6 py-4 rounded-xl bg-purple-600 text-white font-bold text-lg shadow-lg hover:bg-purple-700 transition text-center">Ajouter un élève</Link>
+            <Link href="/matchmaking" className="flex-1 px-6 py-4 rounded-xl bg-green-600 text-white font-bold text-lg shadow-lg hover:bg-green-700 transition text-center">Trouver le meilleur match</Link>
+          </div>
+        </section>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      <footer className="w-full py-6 px-4 bg-white/80 text-center text-gray-500 text-sm shadow-inner animate-fade-in4">
+        <span>© 2025 Studena. Test technique Junior. Propulsé par Next.js, Prisma & SQLite.</span>
       </footer>
+
+      <style jsx global>{`
+        @keyframes fade-in {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in { animation: fade-in 1s cubic-bezier(.4,0,.2,1) both; }
+        .animate-fade-in2 { animation: fade-in 1.5s cubic-bezier(.4,0,.2,1) both; }
+        .animate-fade-in3 { animation: fade-in 2s cubic-bezier(.4,0,.2,1) both; }
+        .animate-fade-in4 { animation: fade-in 2.5s cubic-bezier(.4,0,.2,1) both; }
+      `}</style>
     </div>
   );
 }
