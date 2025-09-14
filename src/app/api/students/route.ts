@@ -16,7 +16,19 @@ export async function GET() {
 
 export async function POST(request: Request) {
   const data = await request.json();
-  // TODO: Validation des données
+  // Validation des données pour les disponibilités
+  const availabilities = Array.isArray(data.availabilities)
+    ? data.availabilities.filter(
+        (a: { day?: string; startTime?: string; endTime?: string }) =>
+          a.day && a.startTime && a.endTime
+      )
+    : [];
+  if (availabilities.length === 0) {
+    return NextResponse.json(
+      { error: "Disponibilité invalide" },
+      { status: 400 }
+    );
+  }
   const student = await prisma.student.create({
     data: {
       fullName: data.fullName,
@@ -27,7 +39,7 @@ export async function POST(request: Request) {
         connect: data.levelIds.map((id: number) => ({ id })),
       },
       availabilities: {
-        create: data.availabilities,
+        create: availabilities,
       },
     },
     include: {
