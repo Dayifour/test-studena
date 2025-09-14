@@ -11,21 +11,21 @@ generator client {
 }
 
 model Subject {
-  id        Int      @id @default(autoincrement)
+  id        Int      @id @default(autoincrement())
   name      String   @unique
   tutors    Tutor[]
   students  Student[]
 }
 
 model Level {
-  id        Int      @id @default(autoincrement)
+  id        Int      @id @default(autoincrement())
   name      String   @unique
   tutors    Tutor[]
   students  Student[]
 }
 
 model Availability {
-  id        Int      @id @default(autoincrement)
+  id        Int      @id @default(autoincrement())
   day       String
   startTime String
   endTime   String
@@ -36,7 +36,7 @@ model Availability {
 }
 
 model Tutor {
-  id            Int            @id @default(autoincrement)
+  id            Int            @id @default(autoincrement())
   fullName      String
   subjects      Subject[]
   levels        Level[]
@@ -44,7 +44,7 @@ model Tutor {
 }
 
 model Student {
-  id            Int            @id @default(autoincrement)
+  id            Int            @id @default(autoincrement())
   fullName      String
   subjects      Subject[]
   levels        Level[]
