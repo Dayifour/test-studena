@@ -1,0 +1,52 @@
+// Prisma schema for Studena Matchmaking
+// Models: Tutor, Student, Subject, Level, Availability
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Subject {
+  id        Int      @id @default(autoincrement)
+  name      String   @unique
+  tutors    Tutor[]
+  students  Student[]
+}
+
+model Level {
+  id        Int      @id @default(autoincrement)
+  name      String   @unique
+  tutors    Tutor[]
+  students  Student[]
+}
+
+model Availability {
+  id        Int      @id @default(autoincrement)
+  day       String
+  startTime String
+  endTime   String
+  tutor     Tutor?   @relation(fields: [tutorId], references: [id])
+  tutorId   Int?
+  student   Student? @relation(fields: [studentId], references: [id])
+  studentId Int?
+}
+
+model Tutor {
+  id            Int            @id @default(autoincrement)
+  fullName      String
+  subjects      Subject[]
+  levels        Level[]
+  availabilities Availability[]
+}
+
+model Student {
+  id            Int            @id @default(autoincrement)
+  fullName      String
+  subjects      Subject[]
+  levels        Level[]
+  availabilities Availability[]
+}
