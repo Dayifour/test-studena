@@ -1,5 +1,6 @@
 // Prisma schema for Studena Matchmaking
 // Models: Tutor, Student, Subject, Level, Availability
+// Each Tutor and Student can have multiple subjects, levels, and availabilities
 
 datasource db {
   provider = "sqlite"
@@ -13,22 +14,22 @@ generator client {
 model Subject {
   id        Int      @id @default(autoincrement())
   name      String   @unique
-  tutors    Tutor[]
-  students  Student[]
+  tutors    Tutor[] @relation("TutorSubjects")
+  students  Student[] @relation("StudentSubjects")
 }
 
 model Level {
   id        Int      @id @default(autoincrement())
   name      String   @unique
-  tutors    Tutor[]
-  students  Student[]
+  tutors    Tutor[] @relation("TutorLevels")
+  students  Student[] @relation("StudentLevels")
 }
 
 model Availability {
   id        Int      @id @default(autoincrement())
-  day       String
-  startTime String
-  endTime   String
+  day       String   // e.g. "Lundi"
+  startTime String   // e.g. "18:00"
+  endTime   String   // e.g. "20:00"
   tutor     Tutor?   @relation(fields: [tutorId], references: [id])
   tutorId   Int?
   student   Student? @relation(fields: [studentId], references: [id])
@@ -38,15 +39,15 @@ model Availability {
 model Tutor {
   id            Int            @id @default(autoincrement())
   fullName      String
-  subjects      Subject[]
-  levels        Level[]
-  availabilities Availability[]
+  subjects      Subject[] @relation("TutorSubjects") // Multiple subjects
+  levels        Level[] @relation("TutorLevels")     // Multiple levels
+  availabilities Availability[]                      // Multiple availabilities
 }
 
 model Student {
   id            Int            @id @default(autoincrement())
   fullName      String
-  subjects      Subject[]
-  levels        Level[]
-  availabilities Availability[]
+  subjects      Subject[] @relation("StudentSubjects") // Multiple subjects
+  levels        Level[] @relation("StudentLevels")     // Multiple levels
+  availabilities Availability[]                        // Multiple availabilities
 }

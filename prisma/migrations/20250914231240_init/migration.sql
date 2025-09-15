@@ -66,9 +66,27 @@ CREATE TABLE "_StudentToSubject" (
     CONSTRAINT "_StudentToSubject_B_fkey" FOREIGN KEY ("B") REFERENCES "Subject" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
--- CreateIndex
 CREATE UNIQUE INDEX "Subject_name_key" ON "Subject"("name");
 
+-- Ajout des matières
+INSERT INTO "Subject" ("name") VALUES
+    ('Mathématiques'),
+    ('Physique'),
+    ('Français'),
+    ('Anglais'),
+    ('SVT'),
+    ('Histoire'),
+    ('Géographie');
+
+-- Ajout des niveaux
+INSERT INTO "Level" ("name") VALUES
+    ('Primaire'),
+    ('Collège'),
+    ('Lycée'),
+    ('Terminale'),
+    ('BTS'),
+    ('Licence'),
+    ('Master');
 -- CreateIndex
 CREATE UNIQUE INDEX "Level_name_key" ON "Level"("name");
 

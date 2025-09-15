@@ -3,13 +3,33 @@ import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
-function checkAvailability(studentSlots: { id: number; day: string; startTime: string; endTime: string; tutorId: number | null; studentId: number | null; }[], tutorSlots: { id: number; day: string; startTime: string; endTime: string; tutorId: number | null; studentId: number | null; }[]) {
+function checkAvailability(
+  studentSlots: {
+    id: number;
+    day: string;
+    startTime: string;
+    endTime: string;
+    tutorId: number | null;
+    studentId: number | null;
+  }[],
+  tutorSlots: {
+    id: number;
+    day: string;
+    startTime: string;
+    endTime: string;
+    tutorId: number | null;
+    studentId: number | null;
+  }[]
+) {
   // Renvoie le nombre de créneaux communs
   let perfect = 0;
   let partial = 0;
   for (const s of studentSlots) {
     for (const t of tutorSlots) {
-      if (s.day === t.day) {
+      // Normalisation du jour (casse, espaces)
+      const dayS = s.day.trim().toLowerCase();
+      const dayT = t.day.trim().toLowerCase();
+      if (dayS === dayT) {
         if (s.startTime === t.startTime && s.endTime === t.endTime) {
           perfect++;
         } else {
@@ -46,8 +66,18 @@ function computeScore({
 
 export async function POST(request: Request) {
   const data = await request.json();
+  const studentId =
+    typeof data.studentId === "number"
+      ? data.studentId
+      : Number(data.studentId);
+  if (!studentId || isNaN(studentId)) {
+    return NextResponse.json(
+      { error: "ID élève manquant ou invalide" },
+      { status: 400 }
+    );
+  }
   const student = await prisma.student.findUnique({
-    where: { id: data.studentId },
+    where: { id: studentId },
     include: {
       subjects: true,
       levels: true,

@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import Select from "../../components/Select";
 import TutorCard from "../../components/TutorCard";
 
 export default function MatchmakingPage() {
@@ -9,13 +8,18 @@ export default function MatchmakingPage() {
     []
   );
   const [selectedStudent, setSelectedStudent] = useState<string>("");
+  type Availability = {
+    day: string;
+    startTime: string;
+    endTime: string;
+  };
   type TutorMatch = {
     tutor: {
       id: number;
       fullName: string;
       subjects: { name: string }[];
       levels: { name: string }[];
-      availabilities: string[];
+      availabilities: Availability[];
     };
     score: number;
   };
@@ -56,13 +60,18 @@ export default function MatchmakingPage() {
           correspondants selon la matière, le niveau et les disponibilités.
         </p>
         <div className="mb-6">
-          <Select
-            label="Élève"
-            name="student"
+          <select
+            className="border rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
             value={selectedStudent}
             onChange={(e) => setSelectedStudent(e.target.value)}
-            options={students.map((s) => `${s.id}|${s.fullName}`)}
-          />
+          >
+            <option value="">Sélectionner un élève</option>
+            {students.map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.fullName}
+              </option>
+            ))}
+          </select>
           <button
             className="mt-4 px-6 py-3 rounded-full bg-green-600 text-white font-semibold shadow hover:bg-green-700 transition w-full"
             onClick={handleMatch}
@@ -92,18 +101,11 @@ export default function MatchmakingPage() {
                 fullName={match.tutor.fullName}
                 subjects={match.tutor.subjects.map((s) => s.name)}
                 levels={match.tutor.levels.map((l) => l.name)}
-                availabilities={match.tutor.availabilities.map((a) => {
-                  // Example: "Monday 09:00-12:00"
-                  const [day, time] = a.split(" ");
-                  const [startTime, endTime] = time
-                    ? time.split("-")
-                    : ["", ""];
-                  return {
-                    day: day || "",
-                    startTime: startTime || "",
-                    endTime: endTime || "",
-                  };
-                })}
+                availabilities={match.tutor.availabilities.map((a) => ({
+                  day: a.day,
+                  startTime: a.startTime,
+                  endTime: a.endTime,
+                }))}
                 score={match.score}
               />
             ))}

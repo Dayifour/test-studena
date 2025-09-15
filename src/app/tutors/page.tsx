@@ -9,7 +9,7 @@ interface Tutor {
   fullName: string;
   subjects: { name: string }[];
   levels: { name: string }[];
-  availabilities: { day: string; timeSlots: string[] }[]; // Adjust fields as needed
+  availabilities: { day: string; startTime: string; endTime: string }[];
 }
 
 export default function TutorsPage() {
@@ -50,8 +50,8 @@ export default function TutorsPage() {
               levels={tutor.levels.map((l) => l.name)}
               availabilities={tutor.availabilities.map((a) => ({
                 day: a.day,
-                startTime: a.timeSlots[0] || "",
-                endTime: a.timeSlots[a.timeSlots.length - 1] || "",
+                startTime: a.startTime,
+                endTime: a.endTime,
               }))}
             />
           ))

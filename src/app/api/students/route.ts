@@ -16,27 +16,40 @@ export async function GET() {
 
 export async function POST(request: Request) {
   const data = await request.json();
-  // Validation des données pour les disponibilités
+  // Validation des données pour les disponibilités, matières et niveaux
   const availabilities = Array.isArray(data.availabilities)
     ? data.availabilities.filter(
         (a: { day?: string; startTime?: string; endTime?: string }) =>
-          a.day && a.startTime && a.endTime
+          typeof a.day === "string" &&
+          typeof a.startTime === "string" &&
+          typeof a.endTime === "string"
       )
     : [];
-  if (availabilities.length === 0) {
+  const subjectIds = Array.isArray(data.subjectIds) ? data.subjectIds : [];
+  const levelIds = Array.isArray(data.levelIds) ? data.levelIds : [];
+  if (
+    !data.fullName ||
+    subjectIds.length === 0 ||
+    levelIds.length === 0 ||
+    availabilities.length === 0
+  ) {
     return NextResponse.json(
-      { error: "Disponibilité invalide" },
+      {
+        error:
+          "Tous les champs sont obligatoires (nom, matières, niveaux, disponibilités)",
+      },
       { status: 400 }
     );
   }
+  // Création de l'élève avec plusieurs matières, niveaux et disponibilités
   const student = await prisma.student.create({
     data: {
       fullName: data.fullName,
       subjects: {
-        connect: data.subjectIds.map((id: number) => ({ id })),
+        connect: subjectIds.map((id: number) => ({ id })),
       },
       levels: {
-        connect: data.levelIds.map((id: number) => ({ id })),
+        connect: levelIds.map((id: number) => ({ id })),
       },
       availabilities: {
         create: availabilities,
