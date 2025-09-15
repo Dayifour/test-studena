@@ -35,35 +35,35 @@ CREATE TABLE "Student" (
 );
 
 -- CreateTable
-CREATE TABLE "_SubjectToTutor" (
+CREATE TABLE "_TutorSubjects" (
     "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL,
-    CONSTRAINT "_SubjectToTutor_A_fkey" FOREIGN KEY ("A") REFERENCES "Subject" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT "_SubjectToTutor_B_fkey" FOREIGN KEY ("B") REFERENCES "Tutor" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT "_TutorSubjects_A_fkey" FOREIGN KEY ("A") REFERENCES "Tutor" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT "_TutorSubjects_B_fkey" FOREIGN KEY ("B") REFERENCES "Subject" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateTable
-CREATE TABLE "_LevelToTutor" (
+CREATE TABLE "_TutorLevels" (
     "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL,
-    CONSTRAINT "_LevelToTutor_A_fkey" FOREIGN KEY ("A") REFERENCES "Level" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT "_LevelToTutor_B_fkey" FOREIGN KEY ("B") REFERENCES "Tutor" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT "_TutorLevels_A_fkey" FOREIGN KEY ("A") REFERENCES "Tutor" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT "_TutorLevels_B_fkey" FOREIGN KEY ("B") REFERENCES "Level" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateTable
-CREATE TABLE "_LevelToStudent" (
+CREATE TABLE "_StudentLevels" (
     "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL,
-    CONSTRAINT "_LevelToStudent_A_fkey" FOREIGN KEY ("A") REFERENCES "Level" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT "_LevelToStudent_B_fkey" FOREIGN KEY ("B") REFERENCES "Student" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT "_StudentLevels_A_fkey" FOREIGN KEY ("A") REFERENCES "Student" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT "_StudentLevels_B_fkey" FOREIGN KEY ("B") REFERENCES "Level" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateTable
-CREATE TABLE "_StudentToSubject" (
+CREATE TABLE "_StudentSubjects" (
     "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL,
-    CONSTRAINT "_StudentToSubject_A_fkey" FOREIGN KEY ("A") REFERENCES "Student" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT "_StudentToSubject_B_fkey" FOREIGN KEY ("B") REFERENCES "Subject" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT "_StudentSubjects_A_fkey" FOREIGN KEY ("A") REFERENCES "Student" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT "_StudentSubjects_B_fkey" FOREIGN KEY ("B") REFERENCES "Subject" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE UNIQUE INDEX "Subject_name_key" ON "Subject"("name");
@@ -78,7 +78,6 @@ INSERT INTO "Subject" ("name") VALUES
     ('Histoire'),
     ('Géographie');
 
--- Ajout des niveaux
 INSERT INTO "Level" ("name") VALUES
     ('Primaire'),
     ('Collège'),
@@ -87,29 +86,59 @@ INSERT INTO "Level" ("name") VALUES
     ('BTS'),
     ('Licence'),
     ('Master');
+
+-- Ajout d'exemples de tuteurs
+INSERT INTO "Tutor" ("fullName") VALUES ('Alice Dupont'), ('Bob Martin');
+-- Ajout d'exemples d'élèves
+INSERT INTO "Student" ("fullName") VALUES ('Claire Petit'), ('David Leroy');
+
+-- Relations matières
+-- Alice: Mathématiques, Physique
+INSERT INTO "_TutorSubjects" ("A", "B") VALUES (1, 1), (1, 2);
+-- Bob: Français, Anglais
+INSERT INTO "_TutorSubjects" ("A", "B") VALUES (2, 3), (2, 4);
+-- Claire: Mathématiques, Français
+INSERT INTO "_StudentSubjects" ("A", "B") VALUES (1, 1), (1, 3);
+-- David: Physique, Anglais
+INSERT INTO "_StudentSubjects" ("A", "B") VALUES (2, 2), (2, 4);
+
+-- Relations niveaux
+-- Alice: Collège, Lycée
+INSERT INTO "_TutorLevels" ("A", "B") VALUES (1, 2), (1, 3);
+-- Bob: Lycée, Terminale
+INSERT INTO "_TutorLevels" ("A", "B") VALUES (2, 3), (2, 4);
+-- Claire: Collège, Lycée
+INSERT INTO "_StudentLevels" ("A", "B") VALUES (1, 2), (1, 3);
+-- David: Lycée, Terminale
+INSERT INTO "_StudentLevels" ("A", "B") VALUES (2, 3), (2, 4);
+
+-- Disponibilités (Alice: Lundi 18:00-20:00, Bob: Mardi 17:00-19:00)
+INSERT INTO "Availability" ("day", "startTime", "endTime", "tutorId") VALUES ('Lundi', '18:00', '20:00', 1), ('Mardi', '17:00', '19:00', 2);
+-- Disponibilités (Claire: Lundi 18:30-19:30, David: Mardi 17:30-18:30)
+INSERT INTO "Availability" ("day", "startTime", "endTime", "studentId") VALUES ('Lundi', '18:30', '19:30', 1), ('Mardi', '17:30', '18:30', 2);
 -- CreateIndex
 CREATE UNIQUE INDEX "Level_name_key" ON "Level"("name");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "_SubjectToTutor_AB_unique" ON "_SubjectToTutor"("A", "B");
+CREATE UNIQUE INDEX "_TutorSubjects_AB_unique" ON "_TutorSubjects"("A", "B");
 
 -- CreateIndex
-CREATE INDEX "_SubjectToTutor_B_index" ON "_SubjectToTutor"("B");
+CREATE INDEX "_TutorSubjects_B_index" ON "_TutorSubjects"("B");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "_LevelToTutor_AB_unique" ON "_LevelToTutor"("A", "B");
+CREATE UNIQUE INDEX "_TutorLevels_AB_unique" ON "_TutorLevels"("A", "B");
 
 -- CreateIndex
-CREATE INDEX "_LevelToTutor_B_index" ON "_LevelToTutor"("B");
+CREATE INDEX "_TutorLevels_B_index" ON "_TutorLevels"("B");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "_LevelToStudent_AB_unique" ON "_LevelToStudent"("A", "B");
+CREATE UNIQUE INDEX "_StudentLevels_AB_unique" ON "_StudentLevels"("A", "B");
 
 -- CreateIndex
-CREATE INDEX "_LevelToStudent_B_index" ON "_LevelToStudent"("B");
+CREATE INDEX "_StudentLevels_B_index" ON "_StudentLevels"("B");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "_StudentToSubject_AB_unique" ON "_StudentToSubject"("A", "B");
+CREATE UNIQUE INDEX "_StudentSubjects_AB_unique" ON "_StudentSubjects"("A", "B");
 
 -- CreateIndex
-CREATE INDEX "_StudentToSubject_B_index" ON "_StudentToSubject"("B");
+CREATE INDEX "_StudentSubjects_B_index" ON "_StudentSubjects"("B");

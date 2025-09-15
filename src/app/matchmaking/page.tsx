@@ -45,7 +45,10 @@ export default function MatchmakingPage() {
       body: JSON.stringify({ studentId: Number(selectedStudent) }),
     });
     const data = await res.json();
-    setResults(data.message ? [] : data);
+    // L'API renvoie { matches, debugStudent, debugTutors } ou { message, ... }
+    setResults(
+      Array.isArray(data?.matches) ? (data.matches as TutorMatch[]) : []
+    );
     setLoading(false);
   };
 
